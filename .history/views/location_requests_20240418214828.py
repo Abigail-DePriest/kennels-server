@@ -29,8 +29,7 @@ def get_single_location(id):
             requested_location = location
 
     return requested_location
-  
-def create_location(location):
+def create_location(animal):
     # Get the id value of the last animal in the list
     max_id = LOCATIONS[-1]["id"]
 
@@ -45,12 +44,3 @@ def create_location(location):
 
     # Return the dictionary with `id` property added
     return location
-
-def update_location(id, new_location):
-    # Iterate the ANIMALS list, but use enumerate() so that
-    # you can access the index value of each item.
-    for index, location in enumerate(LOCATIONS):
-        if location["id"] == id:
-            # Found the animal. Update the value.
-            LOCATIONS[index] = new_location
-            break

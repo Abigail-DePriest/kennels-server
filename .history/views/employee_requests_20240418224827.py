@@ -24,7 +24,7 @@ def get_single_employee(id):
 
     return requested_employee
   
-def create_employee(employee):
+def create_employees(employee):
     # Get the id value of the last animal in the list
     max_id = EMPLOYEES[-1]["id"]
 
@@ -39,12 +39,3 @@ def create_employee(employee):
 
     # Return the dictionary with `id` property added
     return employee
-  
-def update_employee(id, new_employee):
-    # Iterate the ANIMALS list, but use enumerate() so that
-    # you can access the index value of each item.
-    for index, employee in enumerate(EMPLOYEES):
-        if employee["id"] == id:
-            # Found the animal. Update the value.
-            EMPLOYEES[index] = new_employee
-            break
