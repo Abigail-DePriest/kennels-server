@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, create_location, get_all_customers, get_single_customer, get_all_employees, get_single_employee, create_employee, create_customer, delete_animal, update_animal, update_customer, update_employee, update_location
+from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, create_location, get_all_customers, get_single_customer, get_all_employees, get_single_employee, create_employee, create_customer, delete_animal, update_animal, update_customer, update_employee
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
@@ -157,15 +157,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Delete a single animal from the list
         if resource == "animals":
             update_animal(id, post_body)
-            
-        if resource == "customers":
-            update_customer(id, post_body)
-            
-        if resource == "employees":
-            update_employee(id, post_body)
-            
-        if resource == "locations":
-            update_location(id, post_body)
+
         # Encode the new animal and send in response
         self.wfile.write("".encode())
 # This function is not inside the class. It is the starting
