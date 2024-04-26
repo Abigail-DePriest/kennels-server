@@ -1,81 +1,89 @@
 import sqlite3
 import json
-from models import Employee
+from models import Customer
 
-EMPLOYEES = [
+CUSTOMERS = [
     {
         "id": 1,
-        "name": "Jenna Solis"
+        "name": "Ryan Tanay"
     }
 ]
 
 
-def get_all_employees():
+def get_all_customers():
     
     with sqlite3.connect("./kennel.sqlite3") as conn:
-        
+
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-     
-        db_cursor.execute("""
-        SELECT
-            a.id,
-            a.name,
-        FROM employee a
-        """)
-       
-        employees = []
-       
-        dataset = db_cursor.fetchall()
-        
-        for row in dataset:
-           
-            employees = Employee(row['id'], row['name'])
 
-            employees.append(employees.__dict__)
-
-    return employees
-# Function with a single parameter
-def get_single_employee(id):
-    with sqlite3.connect("./kennel.sqlite3") as conn:
-        conn.row_factory = sqlite3.Row
-        db_cursor = conn.cursor()
-       
         db_cursor.execute("""
         SELECT
             a.id,
             a.name
-        FROM animal a
+        FROM customer a
+        """)
+
+        
+        customers = []
+
+        
+        dataset = db_cursor.fetchall()
+
+        
+        for row in dataset:
+
+            customer = Customer(row['id'], row['name'])
+
+            customers.append(customer.__dict__) 
+
+    return customers
+
+
+def get_single_customer(id):
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.name
+        FROM customer a
         WHERE a.id = ?
         """, ( id, ))
+
         
         data = db_cursor.fetchone()
-        
-        employee = Employee(data['id'], data['name'])
+       
+        customer = Customer(data['id'], data['name'], data['breed'],
+                            data['status'], data['location_id'],
+                            data['customer_id'])
 
-        return employee.__dict__
+        return customer.__dict__
   
-def create_employee(employee):
+def create_customer(customer):
     # Get the id value of the last animal in the list
-    max_id = EMPLOYEES[-1]["id"]
+    max_id = CUSTOMERS[-1]["id"]
 
     # Add 1 to whatever that number is
     new_id = max_id + 1
 
     # Add an `id` property to the animal dictionary
-    employee["id"] = new_id
+    customer["id"] = new_id
 
     # Add the animal dictionary to the list
-    EMPLOYEES.append(employee)
+    CUSTOMERS.append(customer)
 
     # Return the dictionary with `id` property added
-    return employee
+    return customer
   
-def update_employee(id, new_employee):
+def update_customer(id, new_customer):
     # Iterate the ANIMALS list, but use enumerate() so that
     # you can access the index value of each item.
-    for index, employee in enumerate(EMPLOYEES):
-        if employee["id"] == id:
+    for index, customer in enumerate(CUSTOMERS):
+        if customer["id"] == id:
             # Found the animal. Update the value.
-            EMPLOYEES[index] = new_employee
+            CUSTOMERS[index] = new_customer
             break

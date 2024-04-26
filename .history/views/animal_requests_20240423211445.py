@@ -33,13 +33,13 @@ ANIMALS = [
 def get_all_animals():
     # Open a connection to the database
     with sqlite3.connect("./kennel.sqlite3") as conn:
-
+       print("fetching all animals...")
         # Just use these. It's a Black Box.
-        conn.row_factory = sqlite3.Row
-        db_cursor = conn.cursor()
+    conn.row_factory = sqlite3.Row
+    db_cursor = conn.cursor()
 
         # Write the SQL query to get the information you want
-        db_cursor.execute("""
+    db_cursor.execute("""
         SELECT
             a.id,
             a.name,
@@ -49,15 +49,15 @@ def get_all_animals():
             a.customer_id
         FROM animal a
         """)
-
+    print("SQL query executed successfully...")
         # Initialize an empty list to hold all animal representations
-        animals = []
+    animals = []
 
         # Convert rows of data into a Python list
-        dataset = db_cursor.fetchall()
+    dataset = db_cursor.fetchall()
 
         # Iterate list of data returned from database
-        for row in dataset:
+    for row in dataset:
 
             # Create an animal instance from the current row.
             # Note that the database fields are specified in
@@ -72,33 +72,18 @@ def get_all_animals():
     return animals
 # Function with a single parameter
 def get_single_animal(id):
-    with sqlite3.connect("./kennel.sqlite3") as conn:
-        conn.row_factory = sqlite3.Row
-        db_cursor = conn.cursor()
+    # Variable to hold the found animal, if it exists
+    requested_animal = None
 
-        # Use a ? parameter to inject a variable's value
-        # into the SQL statement.
-        db_cursor.execute("""
-        SELECT
-            a.id,
-            a.name,
-            a.breed,
-            a.status,
-            a.location_id,
-            a.customer_id
-        FROM animal a
-        WHERE a.id = ?
-        """, ( id, ))
+    # Iterate the ANIMALS list above. Very similar to the
+    # for..of loops you used in JavaScript.
+    for animal in ANIMALS:
+        # Dictionaries in Python use [] notation to find a key
+        # instead of the dot notation that JavaScript used.
+        if animal["id"] == id:
+            requested_animal = animal
 
-        # Load the single result into memory
-        data = db_cursor.fetchone()
-
-        # Create an animal instance from the current row
-        animal = Animal(data['id'], data['name'], data['breed'],
-                            data['status'], data['location_id'],
-                            data['customer_id'])
-
-        return animal.__dict__
+    return requested_animal
   
 def create_animal(animal):
     # Get the id value of the last animal in the list
