@@ -1,7 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, create_location, get_all_customers, get_single_customer, get_all_employees, get_single_employee, create_employee, create_customer, delete_animal, update_animal, update_customer, update_employee, update_location, get_animals_by_location, get_customer_by_email, get_employees_by_location, get_animals_by_status
-
+from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, create_location, get_all_customers, get_single_customer, get_all_employees, get_single_employee, create_employee, create_customer, delete_animal, update_animal, update_customer, update_employee, update_location, get_animals_by_location, get_customer_by_email
 from urllib.parse import urlparse, parse_qs
 
 
@@ -100,13 +99,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             # see if the query dictionary has an email key
             if query.get('email') and resource == 'customers':
                 response = get_customer_by_email(query['email'][0])
-            if query.get('location_id') and resource == 'animals':
+            if query.get('location_id') and resource == 'animal':
                 response = get_animals_by_location(query['location_id'][0])
-            if query.get('location_id') and resource == 'employees':
-                response = get_employees_by_location(query['location_id'][0])
-            if query.get('status') and resource == 'animals':
-                response = get_animals_by_status(query['status'][0])
-                
         self.wfile.write(json.dumps(response).encode())
 
     # Here's a method on the class that overrides the parent's method.

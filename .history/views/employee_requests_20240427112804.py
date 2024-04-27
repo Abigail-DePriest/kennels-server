@@ -21,8 +21,6 @@ def get_all_employees():
         SELECT
             a.id,
             a.name,
-            a.address,
-            a.location_id
         FROM employee a
         """)
        
@@ -32,7 +30,7 @@ def get_all_employees():
         
         for row in dataset:
            
-            employees = Employee(row['id'], row['name'], row['address'], row['location_id'])
+            employees = Employee(row['id'], row['name'])
 
             employees.append(employees.__dict__)
 
@@ -46,9 +44,7 @@ def get_single_employee(id):
         db_cursor.execute("""
         SELECT
             a.id,
-            a.name,
-            a.address,
-            a.location_id
+            a.name
         FROM animal a
         WHERE a.id = ?
         """, ( id, ))
@@ -97,10 +93,7 @@ def get_employees_by_location(location):
         db_cursor.execute("""
         select
             a.id,
-            a.name,
-            a.address,
-            a.location_id
-            
+            a.name
         from Employee a
         WHERE a.location_id = ?
         """, ( location, ))
@@ -109,7 +102,7 @@ def get_employees_by_location(location):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
+            employee = Employee(row['id'], row['name'])
             employees.append(employee.__dict__)
 
     return employees

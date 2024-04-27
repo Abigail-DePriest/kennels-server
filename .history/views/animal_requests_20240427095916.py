@@ -141,7 +141,7 @@ def update_animal(id, new_animal):
             break
 # TODO: you will get an error about the address on customer. Look through the customer model and requests to see if you can solve the issue.
         
-def get_animals_by_location(location):
+def get_animals_by_location(id):
 
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
@@ -156,37 +156,9 @@ def get_animals_by_location(location):
             a.status,
             a.location_id,
             a.customer_id
-        from Animal a
-        WHERE a.location_id = ?
-        """, ( location, ))
-
-        animals = []
-        dataset = db_cursor.fetchall()
-
-        for row in dataset:
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'] , row['location_id'], row['customer_id'])
-            animals.append(animal.__dict__)
-
-    return animals
-
-def get_animals_by_status(status):
-
-    with sqlite3.connect("./kennel.sqlite3") as conn:
-        conn.row_factory = sqlite3.Row
-        db_cursor = conn.cursor()
-
-        # Write the SQL query to get the information you want
-        db_cursor.execute("""
-        SELECT
-            a.id,
-            a.name,
-            a.breed,
-            a.status,
-            a.location_id,
-            a.customer_id
-        from Animal a
-        WHERE a.status = ?
-        """, ( status, ))
+        from Animal c
+        WHERE c.location = ?
+        """, ( id, ))
 
         animals = []
         dataset = db_cursor.fetchall()
