@@ -1,14 +1,11 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, create_location, get_all_customers, get_single_customer, get_all_employees, get_single_employee, create_employee, create_customer, delete_animal, update_animal, update_customer, update_employee, update_location, get_animals_by_location, get_customer_by_email, get_employees_by_location, get_animals_by_status
+from views import get_all_animals, get_single_animal, get_all_locations, get_single_location, create_animal, create_location, get_all_customers, get_single_customer, get_all_employees, get_single_employee, create_employee, create_customer, delete_animal, update_animal, update_customer, update_employee, update_location, get_animals_by_location
 
 from urllib.parse import urlparse, parse_qs
 
-
-class HandleRequests(BaseHTTPRequestHandler):
-  
-        # replace the parse_url function in the class
-    def parse_url(self, path):
+    # replace the parse_url function in the class
+def parse_url(self, path):
         """Parse the url into the resource and id"""
         parsed_url = urlparse(path)
         path_params = parsed_url.path.split('/')  # ['', 'animals', 1]
@@ -28,6 +25,32 @@ class HandleRequests(BaseHTTPRequestHandler):
 # For now, think of a class as a container for functions that
 # work together for a common purpose. In this case, that
 # common purpose is to respond to HTTP requests from a client.
+class HandleRequests(BaseHTTPRequestHandler):
+  
+    def parse_url(self, path):
+        # Just like splitting a string in JavaScript. If the
+        # path is "/animals/1", the resulting list will
+        # have "" at index 0, "animals" at index 1, and "1"
+        # at index 2.
+        path_params = path.split("/")
+        resource = path_params[1]
+        id = None
+
+        # Try to get the item at index 2
+        try:
+            # Convert the string "1" to the integer 1
+            # This is the new parseInt()
+            id = int(path_params[2])
+        except IndexError:
+            pass  # No route parameter exists: /animals
+        except ValueError:
+            pass  # Request had trailing slash: /animals/
+
+        return (resource, id)  # This is a tuple
+    # This is a Docstring it should be at the beginning of all classes and functions
+    # It gives a description of the class or function
+    """Controls the functionality of any GET, PUT, POST, DELETE requests to the server
+    """
 
     # Here's a class function
     def _set_headers(self, status):
@@ -100,13 +123,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             # see if the query dictionary has an email key
             if query.get('email') and resource == 'customers':
                 response = get_customer_by_email(query['email'][0])
-            if query.get('location_id') and resource == 'animals':
+            if query.get('location_id') and resource == 'animal':
                 response = get_animals_by_location(query['location_id'][0])
-            if query.get('location_id') and resource == 'employees':
-                response = get_employees_by_location(query['location_id'][0])
-            if query.get('status') and resource == 'animals':
-                response = get_animals_by_status(query['status'][0])
-                
         self.wfile.write(json.dumps(response).encode())
 
     # Here's a method on the class that overrides the parent's method.

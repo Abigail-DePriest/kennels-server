@@ -7,4 +7,4 @@ class Employee():
         self.location_id = location_id
         
     
-new_employee = Employee(1, "Jenna Solis", "", "")
+new_employee = Employee(1, "Jenna Solis")
