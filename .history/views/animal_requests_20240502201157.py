@@ -1,6 +1,9 @@
 import sqlite3
 import json
-from models import Animal, Location, Customer
+from models import Animal
+from models import Location
+from models import Customer
+
 
 def get_all_animals():
     # Open a connection to the database

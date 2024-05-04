@@ -2,6 +2,14 @@ import sqlite3
 import json
 from models import Customer
 
+CUSTOMERS = [
+    {
+        "id": 1,
+        "name": "Ryan Tanay"
+    }
+]
+
+
 def get_all_customers():
     
     with sqlite3.connect("./kennel.sqlite3") as conn:
@@ -44,10 +52,7 @@ def get_single_customer(id):
         db_cursor.execute("""
         SELECT
             a.id,
-            a.name,
-            a.address,
-            a.email,
-            a.password
+            a.name
         FROM customer a
         WHERE a.id = ?
         """, ( id, ))
@@ -55,7 +60,7 @@ def get_single_customer(id):
         
         data = db_cursor.fetchone()
        
-        customer = Customer(data['id'], data['name'], data['address'], data['email'], data['password'])
+        customer = Customer(data['id'], data['name'])
 
         return customer.__dict__
   

@@ -1,91 +1,98 @@
 import sqlite3
 import json
-from models import Customer
+from models import Employee
 
-def get_all_customers():
+
+def get_all_employees():
     
     with sqlite3.connect("./kennel.sqlite3") as conn:
-
+        
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-
+     
         db_cursor.execute("""
         SELECT
             a.id,
             a.name,
             a.address,
-            a.email,
-            a.password
-        FROM customer a
+            a.location_id
+        FROM employee a
         """)
-
-        
-        customers = []
-
-        
+       
+        employees = []
+       
         dataset = db_cursor.fetchall()
-
         
         for row in dataset:
+           
+            employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
 
-            customer = Customer(row['id'], row['name'], row['address'], row['email'], row['password'])
+            employees.append(employee.__dict__)
 
-            customers.append(customer.__dict__) 
-
-    return customers
-
-
-def get_single_customer(id):
+    return employees
+# Function with a single parameter
+def get_single_employee(id):
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
-
-        
+       
         db_cursor.execute("""
         SELECT
             a.id,
             a.name,
             a.address,
-            a.email,
-            a.password
-        FROM customer a
+            a.location_id
+        FROM employee a
         WHERE a.id = ?
         """, ( id, ))
-
         
         data = db_cursor.fetchone()
-       
-        customer = Customer(data['id'], data['name'], data['address'], data['email'], data['password'])
+        
+        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])
 
-        return customer.__dict__
+        return employee.__dict__
   
-def create_customer(customer):
+def create_employee(employee):
     # Get the id value of the last animal in the list
-    max_id = CUSTOMERS[-1]["id"]
+    max_id = EMPLOYEES[-1]["id"]
 
     # Add 1 to whatever that number is
     new_id = max_id + 1
 
     # Add an `id` property to the animal dictionary
-    customer["id"] = new_id
+    employee["id"] = new_id
 
     # Add the animal dictionary to the list
-    CUSTOMERS.append(customer)
+    EMPLOYEES.append(employee)
 
     # Return the dictionary with `id` property added
-    return customer
+    return employee
+
+
+def delete_employee(id):
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM employee
+        WHERE id = ?
+        """, (id, ))
   
-def update_customer(id, new_customer):
+  
+  
+def update_employee(id, new_employee):
     # Iterate the ANIMALS list, but use enumerate() so that
     # you can access the index value of each item.
-    for index, customer in enumerate(CUSTOMERS):
-        if customer["id"] == id:
+    for index, employee in enumerate(EMPLOYEES):
+        if employee["id"] == id:
             # Found the animal. Update the value.
-            CUSTOMERS[index] = new_customer
+            EMPLOYEES[index] = new_employee
             break
+
+
 # TODO: you will get an error about the address on customer. Look through the customer model and requests to see if you can solve the issue.
         
-def get_customer_by_email(email):
+def get_employees_by_location(location):
 
     with sqlite3.connect("./kennel.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
@@ -94,20 +101,20 @@ def get_customer_by_email(email):
         # Write the SQL query to get the information you want
         db_cursor.execute("""
         select
-            c.id,
-            c.name,
-            c.address,
-            c.email,
-            c.password
-        from Customer c
-        WHERE c.email = ?
-        """, ( email, ))
+            a.id,
+            a.name,
+            a.address,
+            a.location_id
+            
+        from Employee a
+        WHERE a.location_id = ?
+        """, ( location, ))
 
-        customers = []
+        employees = []
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            customer = Customer(row['id'], row['name'], row['address'], row['email'] , row['password'])
-            customers.append(customer.__dict__)
+            employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
+            employees.append(employee.__dict__)
 
-    return customers
+    return employees

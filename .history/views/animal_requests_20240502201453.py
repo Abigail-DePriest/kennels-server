@@ -2,6 +2,7 @@ import sqlite3
 import json
 from models import Animal, Location, Customer
 
+
 def get_all_animals():
     # Open a connection to the database
     with sqlite3.connect("./kennel.sqlite3") as conn:

@@ -88,7 +88,6 @@ class HandleRequests(BaseHTTPRequestHandler):
 
                 else:
                     response = get_all_employees()
-                    
             if resource == "customers":
                 if id is not None:
                     response = get_single_customer(id)
@@ -178,18 +177,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             # will return either True or False from `update_animal`
             success = update_animal(id, post_body)
         # rest of the elif's
-        
-        if resource == "location":
-            # will return either True or False from `update_animal`
-            success = update_location(id, post_body)
-            
-        if resource == "customer":
-            # will return either True or False from `update_animal`
-            success = update_customer(id, post_body)
-            
-        if resource == "employee":
-            # will return either True or False from `update_animal`
-            success = update_employee(id, post_body)
+
         # handle the value of success
         if success:
             self._set_headers(204)

@@ -14,12 +14,10 @@ def get_all_employees():
             a.id,
             a.name,
             a.address,
-            a.location_id,
-            l.name location_name,
-            l.address location_address
+            a.location_id
         FROM Employee a
         JOIN Location l
-            ON l.id = a.location_id
+            ON l.id = a.location
         """)
        
         employees = []
@@ -29,10 +27,6 @@ def get_all_employees():
         for row in dataset:
            
             employee = Employee(row['id'], row['name'], row['address'], row['location_id'])
-            
-            location = Location(row['location_id'], row['location_name'], row['location_address'])
-            
-            employee.location = location.__dict__
 
             employees.append(employee.__dict__)
 
@@ -48,23 +42,14 @@ def get_single_employee(id):
             a.id,
             a.name,
             a.address,
-            a.location_id,
-            l.name location_name,
-            l.address location_address
-        FROM Employee a
-        JOIN Location l
-            ON l.id = a.location_id
-         WHERE a.id = ?
+            a.location_id
+        FROM employee a
+        WHERE a.id = ?
         """, ( id, ))
         
         data = db_cursor.fetchone()
-            
-        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])
-            
-        location = Location(data['location_id'], data['location_name'], data['location_address'])
-            
-        employee.location = location.__dict__
         
+        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])
 
         return employee.__dict__
   

@@ -108,7 +108,7 @@ FROM Animal a
 JOIN Location l
     ON l.id = a.location_id
 
-SELECT
+    SELECT
     a.id,
     a.name,
     a.breed,

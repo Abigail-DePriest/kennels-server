@@ -107,17 +107,3 @@ SELECT
 FROM Animal a
 JOIN Location l
     ON l.id = a.location_id
-
-SELECT
-    a.id,
-    a.name,
-    a.breed,
-    a.status,
-    a.location_id,
-    a.customer_id,
-    l.name customer_name,
-    l.address customer_address,
-    l.email customer_email
-FROM Animal a
-JOIN Customer l
-    ON l.id = a.customer_id
