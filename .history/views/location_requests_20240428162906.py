@@ -2,6 +2,20 @@ import sqlite3
 import json
 from models import Location
 
+LOCATIONS = [
+    {
+        "id": 1,
+        "name": "Nashville North",
+        "address": "8422 Johnson Pike"
+    },
+    {
+        "id": 2,
+        "name": "Nashville South",
+        "address": "209 Emory Drive"
+    }
+]
+
+
 def get_all_locations():
     
     with sqlite3.connect("./kennel.sqlite3") as conn:
@@ -14,7 +28,7 @@ def get_all_locations():
         SELECT
             a.id,
             a.name,
-            a.address
+            a.address,
         FROM location a
         """)
         
@@ -31,7 +45,7 @@ def get_all_locations():
             # Animal class above.
             location = Location(row['id'], row['name'], row['address'])
 
-            locations.append(location.__dict__) # see the notes below for an explanation on this line of code.
+            locations.append(locations.__dict__) # see the notes below for an explanation on this line of code.
 
     return locations
 

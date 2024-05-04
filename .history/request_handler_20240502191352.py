@@ -88,7 +88,6 @@ class HandleRequests(BaseHTTPRequestHandler):
 
                 else:
                     response = get_all_employees()
-                    
             if resource == "customers":
                 if id is not None:
                     response = get_single_customer(id)

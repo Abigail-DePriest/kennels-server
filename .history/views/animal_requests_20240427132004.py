@@ -1,6 +1,34 @@
 import sqlite3
 import json
-from models import Animal, Location, Customer
+from models import Animal
+
+ANIMALS = [
+    {
+        "id": 1,
+        "name": "Snickers",
+        "species": "Dog",
+        "locationId": 1,
+        "customerId": 4,
+        "status": "Admitted"
+    },
+    {
+        "id": 2,
+        "name": "Eleanor",
+        "species": "Dog",
+        "location": 1,
+        "customerId": 2,
+        "status": "Admitted"
+    },
+    {
+        "id": 3,
+        "name": "Blue",
+        "species": "Cat",
+        "locationId": 2,
+        "customerId": 1,
+        "status": "Admitted"
+
+    }
+]
 
 def get_all_animals():
     # Open a connection to the database
@@ -18,17 +46,8 @@ def get_all_animals():
             a.breed,
             a.status,
             a.location_id,
-            a.customer_id,
-            l.name location_name,
-            l.address location_address,
-            c.name customer_name,
-            c.address customer_address,
-            c.email customer_email
-        FROM Animal a
-        JOIN Location l
-            ON l.id = a.location_id
-        JOIN Customer c
-            ON c.id = a.customer_id
+            a.customer_id
+        FROM animal a
         """)
 
         # Initialize an empty list to hold all animal representations
@@ -40,21 +59,15 @@ def get_all_animals():
         # Iterate list of data returned from database
         for row in dataset:
 
-    # Create an animal instance from the current row
-            animal = Animal(row['id'], row['name'], row['breed'], row['status'],
-                            row['location_id'], row['customer_id'])
+            # Create an animal instance from the current row.
+            # Note that the database fields are specified in
+            # exact order of the parameters defined in the
+            # Animal class above.
+            animal = Animal(row['id'], row['name'], row['breed'],
+                            row['status'], row['location_id'],
+                            row['customer_id'])
 
-            # Create a Location instance from the current row
-            location = Location(row['location_id'], row['location_name'], row['location_address'])
-            
-            customer = Customer(row['customer_id'], row['customer_name'], row['customer_address'], row['customer_email'])
-
-            # Add the dictionary representation of the location to the animal
-            animal.location = location.__dict__
-            animal.customer = customer.__dict__
-
-            # Add the dictionary representation of the animal to the list
-            animals.append(animal.__dict__)
+            animals.append(animal.__dict__) # see the notes below for an explanation on this line of code.
 
     return animals
 # Function with a single parameter
@@ -114,33 +127,14 @@ def delete_animal(id):
 
         
 def update_animal(id, new_animal):
-    with sqlite3.connect("./kennel.sqlite3") as conn:
-        db_cursor = conn.cursor()
-
-        db_cursor.execute("""
-        UPDATE Animal
-            SET
-                name = ?,
-                breed = ?,
-                status = ?,
-                location_id = ?,
-                customer_id = ?
-        WHERE id = ?
-        """, (new_animal['name'], new_animal['breed'],
-              new_animal['status'], new_animal['locationId'],
-              new_animal['customerId'], id, ))
-
-        # Were any rows affected?
-        # Did the client send an `id` that exists?
-        rows_affected = db_cursor.rowcount
-
-    # return value of this function
-    if rows_affected == 0:
-        # Forces 404 response by main module
-        return False
-    else:
-        # Forces 204 response by main module
-        return True
+    # Iterate the ANIMALS list, but use enumerate() so that
+    # you can access the index value of each item.
+    for index, animal in enumerate(ANIMALS):
+        if animal["id"] == id:
+            # Found the animal. Update the value.
+            ANIMALS[index] = new_animal
+            break
+# TODO: you will get an error about the address on customer. Look through the customer model and requests to see if you can solve the issue.
         
 def get_animals_by_location(location):
 

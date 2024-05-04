@@ -108,7 +108,7 @@ FROM Animal a
 JOIN Location l
     ON l.id = a.location_id
 
-SELECT
+    SELECT
     a.id,
     a.name,
     a.breed,
@@ -116,8 +116,7 @@ SELECT
     a.location_id,
     a.customer_id,
     l.name customer_name,
-    l.address customer_address,
-    l.email customer_email
+    l.address customer_address
 FROM Animal a
 JOIN Customer l
     ON l.id = a.customer_id

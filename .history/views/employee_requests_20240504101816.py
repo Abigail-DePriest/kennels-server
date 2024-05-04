@@ -48,23 +48,14 @@ def get_single_employee(id):
             a.id,
             a.name,
             a.address,
-            a.location_id,
-            l.name location_name,
-            l.address location_address
+            a.location_id
         FROM Employee a
-        JOIN Location l
-            ON l.id = a.location_id
-         WHERE a.id = ?
+        WHERE a.id = ?
         """, ( id, ))
         
         data = db_cursor.fetchone()
-            
-        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])
-            
-        location = Location(data['location_id'], data['location_name'], data['location_address'])
-            
-        employee.location = location.__dict__
         
+        employee = Employee(data['id'], data['name'], data['address'], data['location_id'])
 
         return employee.__dict__
   

@@ -2,6 +2,7 @@ import sqlite3
 import json
 from models import Customer
 
+
 def get_all_customers():
     
     with sqlite3.connect("./kennel.sqlite3") as conn:

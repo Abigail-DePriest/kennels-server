@@ -1,6 +1,36 @@
 import sqlite3
 import json
-from models import Animal, Location, Customer
+from models import Animal
+from models import Location
+from models import Customer
+
+ANIMALS = [
+    {
+        "id": 1,
+        "name": "Snickers",
+        "species": "Dog",
+        "locationId": 1,
+        "customerId": 4,
+        "status": "Admitted"
+    },
+    {
+        "id": 2,
+        "name": "Eleanor",
+        "species": "Dog",
+        "location": 1,
+        "customerId": 2,
+        "status": "Admitted"
+    },
+    {
+        "id": 3,
+        "name": "Blue",
+        "species": "Cat",
+        "locationId": 2,
+        "customerId": 1,
+        "status": "Admitted"
+
+    }
+]
 
 def get_all_animals():
     # Open a connection to the database
